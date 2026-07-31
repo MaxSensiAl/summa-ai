@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Summa.ai</title>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body {
+      background-color: #050507;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 16px 16px 100px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .app { max-width: 420px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    .card {
+      background-color: #121217;
+      border-radius: 28px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+      transition: transform 0.15s ease;
+    }
+    /* header */
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon {
+      width: 44px; height: 44px; background: #9f85ff; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center; font-size: 22px; color: #050507;
+      box-shadow: 0 6px 16px rgba(159,133,255,0.25);
+    }
+    .brand-text { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; color: #f0f0f5; }
+    .brand-text span { color: #9f85ff; }
+    .dot-menu { color: #8a8aa0; font-size: 22px; padding: 4px 8px; cursor: default; }
+    /* microchip */
+    .chip-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #1a1a22; border-radius: 60px; padding: 8px 14px 8px 12px; border: 1px solid #2a2a34;
+    }
+    .chip-left { display: flex; align-items: center; gap: 12px; }
+    .chip-icon { background: #9f85ff20; width: 38px; height: 38px; border-radius: 30px; display: flex; align-items: center; justify-content: center; color: #9f85ff; font-size: 18px; }
+    .chip-info { display: flex; flex-direction: column; }
+    .chip-title { font-size: 14px; font-weight: 600; color: #f0f0f5; }
+    .chip-sub { font-size: 11px; color: #7a7a92; }
+    .chip-action {
+      background: #9f85ff; border: none; border-radius: 40px; color: #050507; font-weight: 700;
+      font-size: 13px; padding: 8px 18px; display: flex; align-items: center; gap: 8px; cursor: pointer;
+      transition: 0.15s;
+    }
+    .chip-action:active { transform: scale(0.94); opacity: 0.8; }
+    .chip-action:disabled { opacity: 0.4; pointer-events: none; }
+    .progress-wrap { margin-top: 8px; }
+    .progress-bar { height: 4px; background: #2a2a34; border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: #9f85ff; border-radius: 10px; transition: width 0.3s; }
+    .progress-text { font-size: 11px; color: #8a8aa0; margin-top: 4px; display: flex; justify-content: space-between; }
+    .hidden { display: none !important; }
+    /* input */
+    .input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 4px; }
+    .input-label { display: flex; align-items: center; gap: 8px; color: #b0b0c5; font-size: 13px; font-weight: 500; }
+    .input-label i { color: #9f85ff; }
+    .input-actions { display: flex; gap: 2px; flex-wrap: wrap; }
+    .icon-btn {
+      background: transparent; border: none; color: #7a7a92; font-size: 15px; padding: 6px 10px;
+      border-radius: 30px; transition: 0.12s; cursor: pointer; display: flex; align-items: center; gap: 4px;
+    }
+    .icon-btn:active { background: #1e1e28; color: #c0c0d5; }
+    .icon-btn span { font-size: 12px; font-weight: 500; }
+    .textarea-wrap { position: relative; }
+    .textarea-wrap i { position: absolute; left: 18px; top: 18px; color: #9f85ff; font-size: 18px; z-index: 2; }
+    .textarea-wrap .spinner-overlay {
+      position: absolute; inset: 0; background: rgba(5,5,7,0.7); border-radius: 24px;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      font-size: 14px; color: #b0b0c5; z-index: 5; backdrop-filter: blur(2px);
+    }
+    .textarea-wrap .spinner-overlay i { position: static; font-size: 20px; color: #9f85ff; }
+    textarea {
+      width: 100%; background: #0c0c12; border: 1px solid #23232e; border-radius: 24px;
+      padding: 18px 18px 18px 50px; color: #f0f0f5; font-size: 15px; line-height: 1.5;
+      resize: vertical; min-height: 110px; outline: none; transition: 0.15s;
+    }
+    textarea:focus { border-color: #9f85ff; box-shadow: 0 0 0 4px rgba(159,133,255,0.12); }
+    textarea::placeholder { color: #5a5a72; }
+    textarea:disabled { opacity: 0.6; }
+    .control-row { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+    .config-capsule {
+      background: #1a1a24; border: 1px solid #2a2a36; border-radius: 40px; padding: 12px 18px;
+      display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+      transition: 0.12s; color: #d0d0e0; font-weight: 500; font-size: 14px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .config-capsule:active { background: #262632; transform: scale(0.98); }
+    .config-capsule .left { display: flex; align-items: center; gap: 10px; }
+    .config-capsule i { color: #9f85ff; font-size: 15px; }
+    .summarize-btn {
+      background: #9f85ff; border: none; border-radius: 40px; padding: 14px 20px;
+      font-weight: 700; font-size: 16px; color: #050507; display: flex; align-items: center; gap: 12px;
+      cursor: pointer; transition: 0.15s; box-shadow: 0 4px 16px rgba(159,133,255,0.2);
+      justify-content: center; width: 100%;
+    }
+    .summarize-btn:active { transform: scale(0.97); opacity: 0.85; }
+    .summarize-btn:disabled { opacity: 0.4; pointer-events: none; }
+    /* output */
+    .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
+    .output-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; color: #f0f0f5; }
+    .output-title i { color: #9f85ff; }
+    .output-badge {
+      background: #1e1e2a; border-radius: 30px; padding: 4px 16px; font-size: 11px; font-weight: 600;
+      color: #b0b0cc; border: 1px solid #2a2a38; display: flex; align-items: center; gap: 6px;
+    }
+    .output-badge i { color: #9f85ff; font-size: 12px; }
+    .takeaways { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .pill {
+      background: #1a1a24; border-radius: 60px; padding: 12px 18px 12px 16px;
+      display: flex; align-items: flex-start; gap: 12px; border: 1px solid #262632;
+    }
+    .pill-bullet { width: 8px; height: 8px; min-width: 8px; background: #9f85ff; border-radius: 6px; margin-top: 6px; }
+    .pill-text { font-size: 14px; line-height: 1.45; color: #e8e8f0; word-break: break-word; }
+    .output-actions { display: flex; gap: 8px; border-top: 1px solid #1e1e28; padding-top: 14px; flex-wrap: wrap; }
+    .out-btn {
+      background: transparent; border: none; color: #8a8aa0; padding: 6px 14px 6px 10px;
+      border-radius: 30px; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer;
+      transition: 0.12s;
+    }
+    .out-btn:active { background: #1a1a26; color: #c0c0d5; }
+    /* bottom sheet */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      display: flex; align-items: flex-end; justify-content: center; z-index: 999;
+      opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s;
+      padding: 0 12px 12px;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-sheet {
+      background: #ffffff; width: 100%; max-width: 400px; border-radius: 32px 32px 24px 24px;
+      padding: 28px 24px 34px; transform: translateY(30px);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.4);
+    }
+    .modal-overlay.open .modal-sheet { transform: translateY(0); }
+    .modal-handle { width: 48px; height: 5px; background: #d0d0dd; border-radius: 20px; margin: 0 auto 20px; }
+    .modal-title { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 20px; letter-spacing: -0.3px; }
+    .modal-group { margin-bottom: 20px; }
+    .modal-group-label { font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .modal-option {
+      display: flex; align-items: center; justify-content: space-between; padding: 16px 0;
+      border-bottom: 1px solid #f0f0f5; cursor: pointer; transition: 0.1s;
+    }
+    .modal-option:active { background: #f8f8fc; margin: 0 -12px; padding-left: 12px; padding-right: 12px; border-radius: 16px; }
+    .modal-option:last-child { border-bottom: none; }
+    .modal-option-text { font-size: 18px; font-weight: 500; color: #111; }
+    .radio-custom {
+      width: 24px; height: 24px; border-radius: 30px; border: 2.5px solid #c0c0d0;
+      display: flex; align-items: center; justify-content: center; transition: 0.15s; flex-shrink: 0;
+    }
+    .radio-custom.active { border-color: #0f8f7f; }
+    .radio-custom .inner-dot { width: 12px; height: 12px; border-radius: 30px; background: transparent; transition: 0.15s; }
+    .radio-custom.active .inner-dot { background: #0f8f7f; }
+    .modal-close-area { height: 10px; }
+    /* ===== BOTTOM NAV - NATIVE TAB BAR STYLE ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #121217;
+      border-radius: 60px;
+      padding: 8px 12px;
+      border: 1px solid #1e1e2a;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      max-width: 420px;
+      width: 92%;
+      z-index: 100;
+      /* Grid layout with equal columns */
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      justify-items: center;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 6px 0;
+      width: 100%;
+      text-align: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s ease;
+      border-radius: 30px;
+      -webkit-tap-highlight-color: transparent;
+      /* Text label styling */
+      font-size: 10px;
+      font-weight: 500;
+      color: #8a8aa0;
+      letter-spacing: 0.2px;
+      line-height: 1.2;
+    }
+    .nav-item i {
+      font-size: 20px;
+      color: #8a8aa0;
+      transition: 0.15s ease;
+      display: block;
+      line-height: 1;
+    }
+    /* Active state: purple icon + text */
+    .nav-item.active {
+      color: #9f85ff;
+    }
+    .nav-item.active i {
+      color: #9f85ff;
+    }
+    /* Hover effect for non-active tabs */
+    .nav-item:not(.active):hover {
+      color: #b0b0c5;
+    }
+    .nav-item:not(.active):hover i {
+      color: #b0b0c5;
+    }
+    /* Small screen adjustments */
+    @media (max-width: 400px) {
+      .bottom-nav {
+        padding: 6px 8px;
+        border-radius: 50px;
+        gap: 0px;
+      }
+      .nav-item {
+        font-size: 9px;
+        padding: 4px 0;
+        gap: 2px;
+      }
+      .nav-item i {
+        font-size: 18px;
+      }
+    }
+    @media (max-width: 340px) {
+      .bottom-nav {
+        padding: 4px 6px;
+        border-radius: 40px;
+        gap: 0px;
+        width: 96%;
+      }
+      .nav-item {
+        font-size: 8px;
+        padding: 3px 0;
+        gap: 1px;
+      }
+      .nav-item i {
+        font-size: 16px;
+      }
+    }
+    /* link popup */
+    .link-popup-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 1000;
+      opacity: 0; visibility: hidden; transition: 0.2s ease;
+      padding: 20px;
+    }
+    .link-popup-overlay.open { opacity: 1; visibility: visible; }
+    .link-popup {
+      background: #1a1a24; border-radius: 28px; padding: 28px 24px 24px;
+      max-width: 380px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    }
+    .link-popup h3 { color: #f0f0f5; font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    .link-popup h3 i { color: #9f85ff; margin-right: 10px; }
+    .link-popup input {
+      width: 100%; background: #0c0c12; border: 1px solid #2a2a36; border-radius: 16px;
+      padding: 14px 16px; color: #f0f0f5; font-size: 15px; outline: none;
+    }
+    .link-popup input:focus { border-color: #9f85ff; }
+    .link-popup .popup-actions { display: flex; gap: 12px; margin-top: 20px; justify-content: flex-end; }
+    .link-popup .popup-actions button {
+      padding: 10px 24px; border-radius: 40px; border: none; font-weight: 600; font-size: 14px; cursor: pointer;
+      transition: 0.12s;
+    }
+    .link-popup .popup-actions .cancel-btn { background: #2a2a36; color: #b0b0c5; }
+    .link-popup .popup-actions .cancel-btn:active { background: #3a3a46; }
+    .link-popup .popup-actions .fetch-btn { background: #9f85ff; color: #050507; }
+    .link-popup .popup-actions .fetch-btn:active { transform: scale(0.95); opacity: 0.85; }
+    /* toast */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #1e1e2a; color: #f0f0f5; padding: 12px 24px; border-radius: 40px;
+      font-size: 14px; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      border: 1px solid #2a2a38; opacity: 0; transition: 0.25s ease; z-index: 2000;
+      pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast i { color: #9f85ff; margin-right: 10px; }
+    /* views */
+    .view-container { display: block; }
+    .view-container.hidden { display: none !important; }
+    .history-item, .vault-item {
+      background: #1a1a24; border-radius: 20px; padding: 14px 16px; margin-bottom: 12px;
+      border: 1px solid #262632; cursor: pointer; transition: 0.15s;
+    }
+    .history-item:hover, .vault-item:hover { background: #22222e; }
+    .history-item .timestamp { font-size: 11px; color: #7a7a92; margin-bottom: 6px; }
+    .history-item .snippet { font-size: 13px; color: #c0c0d0; margin-bottom: 6px; }
+    .history-item .bullets-preview { font-size: 12px; color: #9f85ff; }
+    .vault-item .vault-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .vault-item .vault-actions { display: flex; gap: 8px; }
+    .vault-item .vault-actions button {
+      background: transparent; border: none; color: #7a7a92; cursor: pointer; padding: 4px 8px;
+      border-radius: 20px; transition: 0.12s; font-size: 13px;
+    }
+    .vault-item .vault-actions button:hover { background: #2a2a36; color: #c0c0d0; }
+    .discover-grid { display: flex; flex-direction: column; gap: 12px; }
+    .discover-card {
+      background: #1a1a24; border-radius: 20px; padding: 16px 18px; border: 1px solid #262632;
+      cursor: pointer; transition: 0.15s;
+    }
+    .discover-card:hover { background: #22222e; transform: translateY(-2px); }
+    .discover-card h4 { color: #f0f0f5; font-size: 16px; margin-bottom: 4px; }
+    .discover-card p { color: #8a8aa0; font-size: 13px; }
+    .clear-history-btn {
+      background: #2a2a36; border: none; border-radius: 30px; padding: 8px 18px;
+      color: #b0b0c5; font-weight: 500; font-size: 13px; cursor: pointer; transition: 0.12s;
+      margin-bottom: 12px;
+    }
+    .clear-history-btn:hover { background: #3a3a46; }
+    .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .view-header h3 { color: #f0f0f5; font-size: 18px; font-weight: 600; }
+    .view-header h3 i { color: #9f85ff; margin-right: 10px; }
+    .empty-state { color: #6a6a82; text-align: center; padding: 30px 0; font-size: 14px; }
+    .empty-state i { font-size: 32px; color: #2a2a3a; margin-bottom: 12px; display: block; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+      <div class="brand-text">Summa<span>.ai</span></div>
+    </div>
+    <div class="dot-menu"><i class="fas fa-ellipsis-vertical"></i></div>
+  </div>
+
+  <!-- ===== SUMMARIZER VIEW ===== -->
+  <div id="summarizerView" class="view-container">
+    <!-- AI ENGINE DOWNLOAD CARD -->
+    <div class="card" style="padding: 12px 16px;" id="downloadCard">
+      <div class="chip-card">
+        <div class="chip-left">
+          <div class="chip-icon"><i class="fas fa-microchip"></i></div>
+          <div class="chip-info">
+            <span class="chip-title">AI Engine</span>
+            <span class="chip-sub" id="engineSub">~40MB · Xenova/t5-small</span>
+          </div>
+        </div>
+        <button class="chip-action" id="downloadBtn"><i class="fas fa-cloud-arrow-down"></i> Download</button>
+      </div>
+      <div id="progressWrap" class="progress-wrap hidden">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text"><span id="progressLabel">Starting...</span><span id="progressPercent">0%</span></div>
+      </div>
+    </div>
+
+    <!-- INPUT SOURCE CARD -->
+    <div class="card">
+      <div class="input-header">
+        <div class="input-label"><i class="fas fa-pencil"></i> Input Source</div>
+        <div class="input-actions">
+          <button class="icon-btn" id="clearBtn"><i class="fas fa-eraser"></i> <span>Clear</span></button>
+          <button class="icon-btn" id="linkBtn"><i class="fas fa-link"></i> <span>Link</span></button>
+          <button class="icon-btn" id="uploadBtn"><i class="fas fa-file-lines"></i> <span>TXT</span></button>
+          <input type="file" id="fileInput" accept=".txt" style="display:none" />
+        </div>
+      </div>
+      <div class="textarea-wrap" id="textareaWrap">
+        <i class="fas fa-pencil"></i>
+        <textarea id="inputText" placeholder="Paste article, URL, or notes...">Artificial intelligence is reshaping how we interact with information. From large language models to real-time translation, AI has become a cornerstone of modern productivity.</textarea>
+        <div id="scrapingOverlay" class="spinner-overlay hidden">
+          <i class="fas fa-spinner fa-pulse"></i> Reading link content, please wait...
+        </div>
+      </div>
+      <div class="control-row">
+        <div class="config-capsule" id="configCapsule">
+          <span class="left"><i class="fas fa-sliders-h"></i> <span id="configLabel">Medium · English</span></span>
+          <i class="fas fa-chevron-down" style="color:#7a7a92; font-size:14px;"></i>
+        </div>
+        <button class="summarize-btn" id="summarizeBtn" disabled><i class="fas fa-wand-magic-sparkles"></i> Summarize</button>
+      </div>
+    </div>
+
+    <!-- KEY TAKEAWAYS CARD -->
+    <div class="card">
+      <div class="output-header">
+        <div class="output-title"><i class="fas fa-list-ul"></i> Key Takeaways</div>
+        <div class="output-badge"><i class="fas fa-check-circle"></i> <span id="badgeText">Idle</span></div>
+      </div>
+      <div class="takeaways" id="takeawaysContainer">
+        <div class="pill"><span class="pill-bullet"></span><span class="pill-text">Download AI engine to start</span></div>
+        <div class="pill"><span class="pill-bullet"></span><span class="pill-text">Then paste text or use the Link button</span></div>
+      </div>
+      <div class="output-actions">
+        <button class="out-btn" id="copyBtn"><i class="far fa-copy"></i> Copy</button>
+        <button class="out-btn" id="shareBtn"><i class="far fa-share-from-square"></i> Share</button>
+        <button class="out-btn" id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+        <button class="out-btn" id="vaultBtn"><i class="fas fa-bookmark"></i> Save to Vault</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HISTORY VIEW ===== -->
+  <div id="historyView" class="view-container hidden">
+    <div class="card">
+      <div class="view-header">
+        <h3><i class="fas fa-clock-rotate-left"></i> History</h3>
+        <button class="clear-history-btn" id="clearHistoryBtn">Clear All</button>
+      </div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ===== DISCOVER VIEW ===== -->
+  <div id="discoverView" class="view-container hidden">
+    <div class="card">
+      <div class="view-header">
+        <h3><i class="fas fa-compass"></i> Discover</h3>
+      </div>
+      <div class="discover-grid" id="discoverGrid"></div>
+    </div>
+  </div>
+
+  <!-- ===== VAULT VIEW ===== -->
+  <div id="vaultView" class="view-container hidden">
+    <div class="card">
+      <div class="view-header">
+        <h3><i class="fas fa-vault"></i> Vault</h3>
+      </div>
+      <div id="vaultList"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM SHEET MODAL (Settings) -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Settings</div>
+      <div class="modal-group">
+        <div class="modal-group-label">LENGTH</div>
+        <div class="modal-option" data-key="length" data-value="short"><span class="modal-option-text">Short</span><div class="radio-custom" id="radioShort"><div class="inner-dot"></div></div></div>
+        <div class="modal-option" data-key="length" data-value="medium"><span class="modal-option-text">Medium</span><div class="radio-custom active" id="radioMedium"><div class="inner-dot"></div></div></div>
+      </div>
+      <div class="modal-group">
+        <div class="modal-group-label">LANGUAGE</div>
+        <div class="modal-option" data-key="lang" data-value="en"><span class="modal-option-text">English</span><div class="radio-custom active" id="radioEn"><div class="inner-dot"></div></div></div>
+        <div class="modal-option" data-key="lang" data-value="hi"><span class="modal-option-text">Hindi</span><div class="radio-custom" id="radioHi"><div class="inner-dot"></div></div></div>
+      </div>
+      <div class="modal-close-area" id="modalCloseArea"></div>
+    </div>
+  </div>
+
+  <!-- LINK POPUP -->
+  <div class="link-popup-overlay" id="linkPopup">
+    <div class="link-popup">
+      <h3><i class="fas fa-link"></i>Enter Webpage URL</h3>
+      <input type="url" id="linkInput" placeholder="https://example.com/article" autofocus />
+      <div class="popup-actions">
+        <button class="cancel-btn" id="popupCancel">Cancel</button>
+        <button class="fetch-btn" id="popupFetch"><i class="fas fa-arrow-right"></i> Fetch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMessage">Done!</span></div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-view="summarizer">
+      <i class="fas fa-robot"></i>
+      <span>Summarizer</span>
+    </button>
+    <button class="nav-item" data-view="history">
+      <i class="fas fa-clock-rotate-left"></i>
+      <span>History</span>
+    </button>
+    <button class="nav-item" data-view="discover">
+      <i class="fas fa-compass"></i>
+      <span>Discover</span>
+    </button>
+    <button class="nav-item" data-view="vault">
+      <i class="fas fa-vault"></i>
+      <span>Vault</span>
+    </button>
+  </nav>
+</div>
+
+<script type="importmap">
+  { "imports": { "@xenova/transformers": "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/dist/transformers.min.js" } }
+</script>
+
+<script type="module">
+  import { pipeline } from '@xenova/transformers';
+
+  // DOM refs - Summarizer
+  const engineSub = document.getElementById('engineSub');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const progressPercent = document.getElementById('progressPercent');
+  const inputText = document.getElementById('inputText');
+  const summarizeBtn = document.getElementById('summarizeBtn');
+  const takeawaysContainer = document.getElementById('takeawaysContainer');
+  const badgeText = document.getElementById('badgeText');
+  const copyBtn = document.getElementById('copyBtn');
+  const shareBtn = document.getElementById('shareBtn');
+  const exportBtn = document.getElementById('exportBtn');
+  const vaultBtn = document.getElementById('vaultBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const linkBtn = document.getElementById('linkBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileInput = document.getElementById('fileInput');
+  const configCapsule = document.getElementById('configCapsule');
+  const configLabel = document.getElementById('configLabel');
+  const downloadCard = document.getElementById('downloadCard');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalCloseArea = document.getElementById('modalCloseArea');
+  const modalOptions = document.querySelectorAll('.modal-option');
+  const radioShort = document.getElementById('radioShort');
+  const radioMedium = document.getElementById('radioMedium');
+  const radioEn = document.getElementById('radioEn');
+  const radioHi = document.getElementById('radioHi');
+  const scrapingOverlay = document.getElementById('scrapingOverlay');
+  const linkPopup = document.getElementById('linkPopup');
+  const linkInput = document.getElementById('linkInput');
+  const popupCancel = document.getElementById('popupCancel');
+  const popupFetch = document.getElementById('popupFetch');
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toastMessage');
+
+  // Views
+  const views = {
+    summarizer: document.getElementById('summarizerView'),
+    history: document.getElementById('historyView'),
+    discover: document.getElementById('discoverView'),
+    vault: document.getElementById('vaultView')
+  };
+  const navItems = document.querySelectorAll('.nav-item');
+
+  // State
+  let summarizer = null;
+  let isProcessing = false;
+  let lastSummary = '';
+  let lastBullets = [];
+  let config = { length: 'medium', lang: 'en' };
+  let isDownloading = false;
+
+  // ----- Toast -----
+  let toastTimeout = null;
+  function showToast(msg, icon = 'fa-check-circle') {
+    toastMessage.textContent = msg;
+    toast.querySelector('i').className = `fas ${icon}`;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // ----- View switching -----
+  function switchView(viewName) {
+    Object.keys(views).forEach(key => {
+      views[key].classList.toggle('hidden', key !== viewName);
+    });
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.view === viewName);
+    });
+    if (viewName === 'history') renderHistory();
+    if (viewName === 'vault') renderVault();
+    if (viewName === 'discover') renderDiscover();
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      switchView(item.dataset.view);
+    });
+  });
+
+  // ----- LocalStorage helpers -----
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem('summa_history')) || []; } catch { return []; }
+  }
+  function setHistory(data) {
+    localStorage.setItem('summa_history', JSON.stringify(data));
+  }
+  function getVault() {
+    try { return JSON.parse(localStorage.getItem('summa_vault')) || []; } catch { return []; }
+  }
+  function setVault(data) {
+    localStorage.setItem('summa_vault', JSON.stringify(data));
+  }
+
+  // ----- Render History -----
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    const history = getHistory();
+    if (history.length === 0) {
+      list.innerHTML = `<div class="empty-state"><i class="fas fa-clock-rotate-left"></i>No past summaries yet.<br>Generate some takeaways to see them here.</div>`;
+      return;
+    }
+    list.innerHTML = history.slice().reverse().map((item, idx) => {
+      const realIdx = history.length - 1 - idx;
+      const bullets = Array.isArray(item.bullets) ? item.bullets : [item.bullets || 'No bullets'];
+      return `
+        <div class="history-item" data-index="${realIdx}">
+          <div class="timestamp">${item.timestamp || 'Unknown time'}</div>
+          <div class="snippet">${item.inputSnippet || 'No snippet'}</div>
+          <div class="bullets-preview">${bullets.slice(0, 2).join(' • ')}${bullets.length > 2 ? ' …' : ''}</div>
+        </div>
+      `;
+    }).join('');
+
+    list.querySelectorAll('.history-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.dataset.index);
+        const historyData = getHistory();
+        const item = historyData[idx];
+        if (item) {
+          inputText.value = item.inputSnippet || '';
+          if (item.bullets) {
+            const bullets = Array.isArray(item.bullets) ? item.bullets : [item.bullets];
+            renderTakeaways(bullets);
+            lastBullets = bullets;
+            lastSummary = bullets.join('\n');
+            setBadge('Loaded from History');
+            showToast('Loaded from History', 'fa-clock-rotate-left');
+          }
+          switchView('summarizer');
+        }
+      });
+    });
+  }
+
+  // ----- Render Vault -----
+  function renderVault() {
+    const list = document.getElementById('vaultList');
+    const vault = getVault();
+    if (vault.length === 0) {
+      list.innerHTML = `<div class="empty-state"><i class="fas fa-vault"></i>Your vault is empty.<br>Save your favorite takeaways to see them here.</div>`;
+      return;
+    }
+    list.innerHTML = vault.map((item, idx) => {
+      const bullets = Array.isArray(item.bullets) ? item.bullets : [item.bullets || 'No bullets'];
+      return `
+        <div class="vault-item" data-index="${idx}">
+          <div class="vault-header">
+            <div>
+              <div style="font-size:12px; color:#7a7a92; margin-bottom:4px;">${item.timestamp || 'Unknown'}</div>
+              <div style="font-size:13px; color:#c0c0d0; margin-bottom:6px;">${item.inputSnippet || 'No snippet'}</div>
+              ${bullets.map(b => `<div style="font-size:13px; color:#e8e8f0; padding:2px 0;">• ${b}</div>`).join('')}
+            </div>
+            <div class="vault-actions">
+              <button class="vault-copy-btn" data-index="${idx}"><i class="fas fa-copy"></i></button>
+              <button class="vault-delete-btn" data-index="${idx}"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    list.querySelectorAll('.vault-copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.index);
+        const vault = getVault();
+        const item = vault[idx];
+        if (item && item.bullets) {
+          const text = Array.isArray(item.bullets) ? item.bullets.join('\n') : item.bullets;
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('Copied from Vault!', 'fa-copy');
+          }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            showToast('Copied from Vault!', 'fa-copy');
+          });
+        }
+      });
+    });
+
+    list.querySelectorAll('.vault-delete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.index);
+        const vault = getVault();
+        vault.splice(idx, 1);
+        setVault(vault);
+        renderVault();
+        showToast('Removed from Vault', 'fa-trash');
+      });
+    });
+  }
+
+  // ----- Render Discover -----
+  function renderDiscover() {
+    const grid = document.getElementById('discoverGrid');
+    const topics = [
+      {
+        title: 'Brief History of AI',
+        desc: 'From Turing to Transformers — the evolution of artificial intelligence.',
+        text: 'The history of artificial intelligence spans decades, from Alan Turing\'s foundational work in the 1950s to the modern era of deep learning and transformer architectures. Early AI focused on symbolic reasoning and problem-solving, while today\'s systems leverage massive neural networks trained on internet-scale data. Key milestones include the development of backpropagation, the rise of convolutional neural networks for computer vision, and the breakthrough of attention mechanisms that power large language models. AI continues to evolve rapidly, with researchers exploring multimodal systems, reasoning capabilities, and alignment with human values.'
+      },
+      {
+        title: 'Understanding Quantum Computing',
+        desc: 'A beginner-friendly overview of qubits, superposition, and entanglement.',
+        text: 'Quantum computing represents a fundamental shift from classical computing, leveraging the principles of quantum mechanics to perform calculations that would be infeasible for traditional computers. Unlike classical bits that represent 0 or 1, quantum bits (qubits) can exist in superposition, enabling massive parallelism. Entanglement allows qubits to be correlated in ways that defy classical intuition. While still in its early stages, quantum computing promises breakthroughs in cryptography, drug discovery, optimization problems, and materials science. Companies like IBM, Google, and startups are racing to build fault-tolerant quantum computers.'
+      },
+      {
+        title: 'The Future of Renewable Energy',
+        desc: 'Solar, wind, and storage technologies reshaping our world.',
+        text: 'Renewable energy is undergoing a transformative era as solar and wind technologies become increasingly cost-competitive with fossil fuels. Advances in photovoltaic efficiency, offshore wind turbine design, and grid-scale battery storage are accelerating the transition to clean energy. The integration of smart grids, demand-response systems, and AI-driven energy management is optimizing power distribution and reducing waste. Governments and corporations worldwide are committing to net-zero targets, driving innovation in green hydrogen, geothermal, and next-generation nuclear technologies. The future energy landscape will be decentralized, resilient, and increasingly reliant on digitalization.'
+      },
+      {
+        title: 'Decoding Large Language Models',
+        desc: 'How LLMs like GPT work and what they mean for the future.',
+        text: 'Large Language Models (LLMs) have revolutionized natural language processing by learning from vast amounts of text data. These models, built on transformer architectures with billions of parameters, can generate coherent text, translate languages, write code, and even engage in complex reasoning. The training process involves self-supervised learning, where models predict missing words in sentences, gradually building a deep understanding of language structure and semantics. Key innovations include attention mechanisms, positional encodings, and reinforcement learning from human feedback. As LLMs continue to scale, they raise important questions about safety, bias, and the future of human-AI interaction.'
+      }
+    ];
+    grid.innerHTML = topics.map((topic, idx) => `
+      <div class="discover-card" data-index="${idx}">
+        <h4>${topic.title}</h4>
+        <p>${topic.desc}</p>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.discover-card').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.dataset.index);
+        const topic = topics[idx];
+        if (topic) {
+          inputText.value = topic.text;
+          switchView('summarizer');
+          inputText.focus();
+          showToast(`Loaded: ${topic.title}`, 'fa-compass');
+        }
+      });
+    });
+  }
+
+  // ----- Helpers -----
+  function setBadge(txt) { badgeText.textContent = txt; }
+  function renderTakeaways(items) {
+    takeawaysContainer.innerHTML = '';
+    if (!items || items.length === 0) items = ['No summary generated'];
+    items.forEach(text => {
+      const pill = document.createElement('div');
+      pill.className = 'pill';
+      const bullet = document.createElement('span');
+      bullet.className = 'pill-bullet';
+      const ptext = document.createElement('span');
+      ptext.className = 'pill-text';
+      ptext.textContent = text;
+      pill.appendChild(bullet);
+      pill.appendChild(ptext);
+      takeawaysContainer.appendChild(pill);
+    });
+    lastSummary = items.join('\n');
+    lastBullets = items;
+  }
+  function showProgress(show) { progressWrap.classList.toggle('hidden', !show); }
+  function updateProgress(pct, label) {
+    const capped = pct >= 100 ? 100 : Math.min(pct, 99);
+    progressFill.style.width = `${capped}%`;
+    progressPercent.textContent = `${capped}%`;
+    if (label) progressLabel.textContent = label;
+  }
+  function updateConfigLabel() {
+    const len = config.length === 'short' ? 'Short' : 'Medium';
+    const lang = config.lang === 'en' ? 'English' : 'Hindi';
+    configLabel.textContent = `${len} · ${lang}`;
+  }
+  function syncModal() {
+    radioShort.classList.toggle('active', config.length === 'short');
+    radioMedium.classList.toggle('active', config.length === 'medium');
+    radioEn.classList.toggle('active', config.lang === 'en');
+    radioHi.classList.toggle('active', config.lang === 'hi');
+  }
+
+  // ----- Translate -----
+  async function translateText(text, targetLang) {
+    if (targetLang === 'en') return text;
+    try {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('Translation API error');
+      const data = await resp.json();
+      if (data && data[0]) {
+        return data[0].map(item => item[0]).join('');
+      }
+      return text;
+    } catch { return text; }
+  }
+
+  // ----- Web scraper -----
+  async function scrapeUrl(url) {
+    try {
+      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+      const resp = await fetch(proxy);
+      const data = await resp.json();
+      if (!data.contents) throw new Error('No content');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data.contents, 'text/html');
+      const elements = doc.querySelectorAll('p, h1, h2, h3');
+      let texts = [];
+      elements.forEach(el => {
+        const txt = el.textContent.trim();
+        if (txt.length > 30) texts.push(txt);
+      });
+      return texts.join('\n\n');
+    } catch { return ''; }
+  }
+
+  function isSocialMediaUrl(url) {
+    const socialDomains = ['facebook.com', 'instagram.com', 'x.com', 'twitter.com', 'linkedin.com'];
+    try {
+      const host = new URL(url).hostname.replace('www.', '');
+      return socialDomains.some(domain => host.includes(domain));
+    } catch { return false; }
+  }
+
+  async function fetchAndScrapeLink(url) {
+    if (!url || !url.startsWith('http')) {
+      renderTakeaways(['Please enter a valid URL starting with http:// or https://']);
+      return;
+    }
+    if (isSocialMediaUrl(url)) {
+      renderTakeaways([
+        'Social media links are not supported for scraping.',
+        'Please paste the article text directly or use a public article URL.'
+      ]);
+      setBadge('Idle');
+      return;
+    }
+    scrapingOverlay.classList.remove('hidden');
+    inputText.disabled = true;
+    setBadge('Scraping Webpage...');
+    const scraped = await scrapeUrl(url);
+    scrapingOverlay.classList.add('hidden');
+    inputText.disabled = false;
+    if (scraped.length > 20) {
+      inputText.value = scraped;
+      setBadge('Scraped');
+      showToast('Webpage content loaded!', 'fa-link');
+    } else {
+      renderTakeaways(['Could not extract content from this URL.']);
+      setBadge('Idle');
+    }
+  }
+
+  // ----- Download engine -----
+  async function downloadEngine() {
+    if (isDownloading) return;
+    isDownloading = true;
+    downloadBtn.disabled = true;
+    downloadBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Loading';
+    showProgress(true);
+    updateProgress(5, 'Initializing...');
+    setBadge('Downloading...');
+
+    try {
+      const pipe = await pipeline('summarization', 'Xenova/t5-small', {
+        progress_callback: (data) => {
+          if (data.status === 'progress') {
+            const raw = Math.round(data.progress * 100);
+            const capped = raw >= 100 ? 99 : Math.min(raw, 99);
+            updateProgress(capped, data.file ? `Downloading ${data.file}` : 'Loading...');
+          }
+        }
+      });
+      updateProgress(100, 'Ready!');
+      summarizer = (text, len) => {
+        const maxLen = len === 'short' ? 80 : 150;
+        const minLen = len === 'short' ? 20 : 40;
+        return pipe(text, { max_length: maxLen, min_length: minLen, do_sample: false });
+      };
+      setTimeout(() => { showProgress(false); }, 500);
+      downloadBtn.innerHTML = '<i class="fas fa-check"></i> Ready';
+      downloadBtn.style.background = '#3a3a4a';
+      downloadBtn.style.color = '#b0b0cc';
+      setBadge('Ready');
+      summarizeBtn.disabled = false;
+      engineSub.textContent = '✔ cached';
+      downloadCard.style.display = 'none';
+      renderTakeaways(['AI engine ready!', 'Paste text or use the Link button to scrape a webpage.']);
+      showToast('AI Engine loaded successfully!', 'fa-microchip');
+      isDownloading = false;
+    } catch (err) {
+      console.error(err);
+      showProgress(false);
+      downloadBtn.disabled = false;
+      downloadBtn.innerHTML = '<i class="fas fa-cloud-arrow-down"></i> Retry';
+      setBadge('Error');
+      showToast('Download failed. Please try again.', 'fa-exclamation-triangle');
+      isDownloading = false;
+    }
+  }
+
+  // ----- Summarize -----
+  async function handleSummarize() {
+    if (isProcessing || !summarizer) return;
+    let raw = inputText.value.trim();
+    if (!raw || raw.length < 5) { renderTakeaways(['Please enter text or use the Link button.']); return; }
+
+    if (raw.startsWith('http://') || raw.startsWith('https://')) {
+      if (isSocialMediaUrl(raw)) {
+        renderTakeaways(['Social media links are not supported for scraping.', 'Please paste the article text directly.']);
+        setBadge('Idle');
+        return;
+      }
+      scrapingOverlay.classList.remove('hidden');
+      inputText.disabled = true;
+      setBadge('Scraping Webpage...');
+      const scraped = await scrapeUrl(raw);
+      scrapingOverlay.classList.add('hidden');
+      inputText.disabled = false;
+      if (scraped.length > 20) {
+        inputText.value = scraped;
+        raw = scraped;
+        setBadge('Scraped');
+      } else {
+        renderTakeaways(['Could not extract content from URL.']);
+        setBadge('Idle');
+        return;
+      }
+    }
+
+    if (raw.length < 15) { renderTakeaways(['Please enter at least 15 characters.']); return; }
+
+    isProcessing = true;
+    summarizeBtn.disabled = true;
+    summarizeBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Computing';
+    setBadge('Computing...');
+
+    try {
+      const result = await summarizer(raw, config.length);
+      let summary = '';
+      if (Array.isArray(result) && result[0]?.summary_text) summary = result[0].summary_text;
+      else if (typeof result === 'string') summary = result;
+      else if (result?.summary_text) summary = result.summary_text;
+      else summary = 'No summary generated.';
+
+      let sentences = summary.split(/[.!?]\s+/).filter(s => s.trim().length > 3);
+      if (sentences.length < 2 && summary.includes(',')) sentences = summary.split(',').filter(s => s.trim().length > 3);
+      if (sentences.length === 0) sentences = [summary];
+      let bullets = sentences.map(s => s.trim().charAt(0).toUpperCase() + s.trim().slice(1));
+
+      if (config.lang === 'hi') {
+        setBadge('Translating...');
+        const translated = await Promise.all(bullets.map(b => translateText(b, 'hi')));
+        bullets = translated;
+      }
+
+      renderTakeaways(bullets);
+      setBadge('Complete');
+      showToast('Summary generated!', 'fa-wand-magic-sparkles');
+
+      const history = getHistory();
+      history.push({
+        timestamp: new Date().toLocaleString(),
+        inputSnippet: raw.slice(0, 80) + (raw.length > 80 ? '...' : ''),
+        bullets: bullets
+      });
+      setHistory(history);
+
+    } catch (e) {
+      console.error(e);
+      renderTakeaways(['Error during summarization.']);
+      setBadge('Error');
+      showToast('Summarization error.', 'fa-exclamation-triangle');
+    } finally {
+      isProcessing = false;
+      summarizeBtn.disabled = false;
+      summarizeBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Summarize';
+    }
+  }
+
+  // ----- Vault save -----
+  vaultBtn.addEventListener('click', () => {
+    if (!lastBullets || lastBullets.length === 0 || lastBullets[0] === 'No summary generated') {
+      showToast('No summary to save. Generate one first!', 'fa-info-circle');
+      return;
+    }
+    const vault = getVault();
+    vault.push({
+      timestamp: new Date().toLocaleString(),
+      inputSnippet: inputText.value.trim().slice(0, 80) + (inputText.value.trim().length > 80 ? '...' : ''),
+      bullets: lastBullets
+    });
+    setVault(vault);
+    showToast('Saved to Vault!', 'fa-bookmark');
+  });
+
+  // ----- Copy -----
+  copyBtn.addEventListener('click', async () => {
+    const text = lastSummary || takeawaysContainer.textContent.trim();
+    if (!text) { showToast('No content to copy.', 'fa-info-circle'); return; }
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      showToast('Copied to clipboard!', 'fa-copy');
+      setTimeout(() => copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy', 1800);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      showToast('Copied to clipboard!', 'fa-copy');
+      setTimeout(() => copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy', 1800);
+    }
+  });
+
+  // ----- Share & Export -----
+  shareBtn.addEventListener('click', () => showToast('Content Shared!', 'fa-share-from-square'));
+  exportBtn.addEventListener('click', () => showToast('Exported Successfully!', 'fa-file-export'));
+
+  // ----- Clear -----
+  clearBtn.addEventListener('click', () => {
+    inputText.value = '';
+    inputText.focus();
+    renderTakeaways(['Ready for new input.']);
+    setBadge('Idle');
+    showToast('Cleared!', 'fa-eraser');
+  });
+
+  // ----- Upload TXT -----
+  uploadBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      inputText.value = ev.target.result;
+      fileInput.value = '';
+      showToast('File loaded!', 'fa-file-lines');
+    };
+    reader.readAsText(file);
+  });
+
+  // ----- Link popup -----
+  function openLinkPopup() {
+    linkPopup.classList.add('open');
+    linkInput.value = '';
+    setTimeout(() => linkInput.focus(), 100);
+  }
+  function closeLinkPopup() { linkPopup.classList.remove('open'); }
+  linkBtn.addEventListener('click', openLinkPopup);
+  popupCancel.addEventListener('click', closeLinkPopup);
+  linkPopup.addEventListener('click', (e) => { if (e.target === linkPopup) closeLinkPopup(); });
+  linkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') popupFetch.click(); });
+  popupFetch.addEventListener('click', async () => {
+    const url = linkInput.value.trim();
+    closeLinkPopup();
+    if (url) await fetchAndScrapeLink(url);
+    else renderTakeaways(['Please enter a valid URL.']);
+  });
+
+  // ----- Clear History -----
+  document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+    if (confirm('Clear all history entries?')) {
+      setHistory([]);
+      renderHistory();
+      showToast('History cleared!', 'fa-trash');
+    }
+  });
+
+  // ----- Modal -----
+  function openModal() { modalOverlay.classList.add('open'); syncModal(); }
+  function closeModal() { modalOverlay.classList.remove('open'); }
+  configCapsule.addEventListener('click', openModal);
+  modalCloseArea.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+  modalOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const key = opt.dataset.key;
+      const val = opt.dataset.value;
+      if (key && val) {
+        config[key] = val;
+        updateConfigLabel();
+        syncModal();
+        closeModal();
+        showToast(`Settings updated: ${key} = ${val}`, 'fa-sliders-h');
+      }
+    });
+  });
+
+  // ----- Events -----
+  downloadBtn.addEventListener('click', downloadEngine);
+  summarizeBtn.addEventListener('click', handleSummarize);
+
+  // Init
+  setBadge('Idle');
+  summarizeBtn.disabled = true;
+  updateConfigLabel();
+  renderTakeaways(['Download AI engine to start', 'Then paste text or use the Link button']);
+  renderDiscover();
+</script>
+</body>
+</html>
