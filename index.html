@@ -165,7 +165,7 @@
     .radio-custom .inner-dot { width: 12px; height: 12px; border-radius: 30px; background: transparent; transition: 0.15s; }
     .radio-custom.active .inner-dot { background: #0f8f7f; }
     .modal-close-area { height: 10px; }
-    /* ===== BOTTOM NAV - NATIVE TAB BAR STYLE ===== */
+    /* bottom nav */
     .bottom-nav {
       position: fixed;
       bottom: 18px;
@@ -181,7 +181,6 @@
       max-width: 420px;
       width: 92%;
       z-index: 100;
-      /* Grid layout with equal columns */
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       justify-items: center;
@@ -203,7 +202,6 @@
       transition: 0.15s ease;
       border-radius: 30px;
       -webkit-tap-highlight-color: transparent;
-      /* Text label styling */
       font-size: 10px;
       font-weight: 500;
       color: #8a8aa0;
@@ -217,51 +215,27 @@
       display: block;
       line-height: 1;
     }
-    /* Active state: purple icon + text */
     .nav-item.active {
       color: #9f85ff;
     }
     .nav-item.active i {
       color: #9f85ff;
     }
-    /* Hover effect for non-active tabs */
     .nav-item:not(.active):hover {
       color: #b0b0c5;
     }
     .nav-item:not(.active):hover i {
       color: #b0b0c5;
     }
-    /* Small screen adjustments */
     @media (max-width: 400px) {
-      .bottom-nav {
-        padding: 6px 8px;
-        border-radius: 50px;
-        gap: 0px;
-      }
-      .nav-item {
-        font-size: 9px;
-        padding: 4px 0;
-        gap: 2px;
-      }
-      .nav-item i {
-        font-size: 18px;
-      }
+      .bottom-nav { padding: 6px 8px; border-radius: 50px; gap: 0px; }
+      .nav-item { font-size: 9px; padding: 4px 0; gap: 2px; }
+      .nav-item i { font-size: 18px; }
     }
     @media (max-width: 340px) {
-      .bottom-nav {
-        padding: 4px 6px;
-        border-radius: 40px;
-        gap: 0px;
-        width: 96%;
-      }
-      .nav-item {
-        font-size: 8px;
-        padding: 3px 0;
-        gap: 1px;
-      }
-      .nav-item i {
-        font-size: 16px;
-      }
+      .bottom-nav { padding: 4px 6px; border-radius: 40px; gap: 0px; width: 96%; }
+      .nav-item { font-size: 8px; padding: 3px 0; gap: 1px; }
+      .nav-item i { font-size: 16px; }
     }
     /* link popup */
     .link-popup-overlay {
@@ -458,6 +432,7 @@
         <div class="modal-group-label">LENGTH</div>
         <div class="modal-option" data-key="length" data-value="short"><span class="modal-option-text">Short</span><div class="radio-custom" id="radioShort"><div class="inner-dot"></div></div></div>
         <div class="modal-option" data-key="length" data-value="medium"><span class="modal-option-text">Medium</span><div class="radio-custom active" id="radioMedium"><div class="inner-dot"></div></div></div>
+        <div class="modal-option" data-key="length" data-value="detailed"><span class="modal-option-text">Detailed</span><div class="radio-custom" id="radioDetailed"><div class="inner-dot"></div></div></div>
       </div>
       <div class="modal-group">
         <div class="modal-group-label">LANGUAGE</div>
@@ -538,6 +513,7 @@
   const modalOptions = document.querySelectorAll('.modal-option');
   const radioShort = document.getElementById('radioShort');
   const radioMedium = document.getElementById('radioMedium');
+  const radioDetailed = document.getElementById('radioDetailed');
   const radioEn = document.getElementById('radioEn');
   const radioHi = document.getElementById('radioHi');
   const scrapingOverlay = document.getElementById('scrapingOverlay');
@@ -786,18 +762,20 @@
     if (label) progressLabel.textContent = label;
   }
   function updateConfigLabel() {
-    const len = config.length === 'short' ? 'Short' : 'Medium';
+    const lenMap = { short: 'Short', medium: 'Medium', detailed: 'Detailed' };
+    const len = lenMap[config.length] || 'Medium';
     const lang = config.lang === 'en' ? 'English' : 'Hindi';
     configLabel.textContent = `${len} · ${lang}`;
   }
   function syncModal() {
     radioShort.classList.toggle('active', config.length === 'short');
     radioMedium.classList.toggle('active', config.length === 'medium');
+    radioDetailed.classList.toggle('active', config.length === 'detailed');
     radioEn.classList.toggle('active', config.lang === 'en');
     radioHi.classList.toggle('active', config.lang === 'hi');
   }
 
-  // ----- Translate -----
+  // ----- Translate (supports longer sentences) -----
   async function translateText(text, targetLang) {
     if (targetLang === 'en') return text;
     try {
@@ -890,8 +868,18 @@
       });
       updateProgress(100, 'Ready!');
       summarizer = (text, len) => {
-        const maxLen = len === 'short' ? 80 : 150;
-        const minLen = len === 'short' ? 20 : 40;
+        // Length configurations
+        let maxLen, minLen;
+        if (len === 'short') {
+          maxLen = 80;
+          minLen = 30;
+        } else if (len === 'detailed') {
+          maxLen = 300;
+          minLen = 120;
+        } else { // medium (default)
+          maxLen = 150;
+          minLen = 60;
+        }
         return pipe(text, { max_length: maxLen, min_length: minLen, do_sample: false });
       };
       setTimeout(() => { showProgress(false); }, 500);
@@ -960,11 +948,13 @@
       else if (result?.summary_text) summary = result.summary_text;
       else summary = 'No summary generated.';
 
+      // Split into sentences for bullet points
       let sentences = summary.split(/[.!?]\s+/).filter(s => s.trim().length > 3);
       if (sentences.length < 2 && summary.includes(',')) sentences = summary.split(',').filter(s => s.trim().length > 3);
       if (sentences.length === 0) sentences = [summary];
       let bullets = sentences.map(s => s.trim().charAt(0).toUpperCase() + s.trim().slice(1));
 
+      // Translate if Hindi (handles longer sentences gracefully)
       if (config.lang === 'hi') {
         setBadge('Translating...');
         const translated = await Promise.all(bullets.map(b => translateText(b, 'hi')));
